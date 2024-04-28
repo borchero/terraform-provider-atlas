@@ -63,21 +63,19 @@ type (
 	}
 )
 
-var (
-	cloudBlock = schema.SingleNestedBlock{
-		Attributes: map[string]schema.Attribute{
-			"token": schema.StringAttribute{
-				Optional: true,
-			},
-			"url": schema.StringAttribute{
-				Optional: true,
-			},
-			"project": schema.StringAttribute{
-				Optional: true,
-			},
+var cloudBlock = schema.SingleNestedBlock{
+	Attributes: map[string]schema.Attribute{
+		"token": schema.StringAttribute{
+			Optional: true,
 		},
-	}
-)
+		"url": schema.StringAttribute{
+			Optional: true,
+		},
+		"project": schema.StringAttribute{
+			Optional: true,
+		},
+	},
+}
 
 // Ensure AtlasProvider satisfies various provider interfaces.
 var (
@@ -153,6 +151,9 @@ func (p *AtlasProvider) Configure(ctx context.Context, req provider.ConfigureReq
 	version := fmt.Sprintf("%s-%s", v.Version, v.SHA)
 	if v.Canary {
 		version += "-canary"
+	}
+	if v.Community {
+		version += " (community edition)"
 	}
 	tflog.Debug(ctx, "found atlas-cli", map[string]any{
 		"version": version,
